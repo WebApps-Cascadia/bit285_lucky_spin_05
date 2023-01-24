@@ -24,7 +24,7 @@ namespace LuckySpin.Controllers
         public SpinnerController(Repository repository)
         {
             // 3) TODO: save the DIJ Repository object into your instance variable
-
+            this.repository = repository;
         }
 
         /***
@@ -42,6 +42,7 @@ namespace LuckySpin.Controllers
             if(!ModelState.IsValid) { return View(); }
 
             //TODO: Store the player in the repository
+            this.repository.Player = player;
 
 
             return RedirectToAction("Spin");
@@ -49,14 +50,14 @@ namespace LuckySpin.Controllers
 
         /***
          * Spin Action
-         **/       
+         **/
         public IActionResult Spin() //DON'T pass player info, get from repository
         {
             //TODO - Change the line below: create a new Spin with the player from the repository
-            Spin spin = new Spin {  };
+            Spin spin = new Spin { Player = repository.Player };
 
             //TODO - Change the line below: get the Player's current balance from the repository
-            currentBalance = 1.0m;
+            currentBalance = repository.Player.Balance;
 
             /**
              * GAME PLAY LOGIC TODOs
@@ -73,14 +74,28 @@ namespace LuckySpin.Controllers
              *       - Update the Player object with the current balance 
              *       - go to the Spin View
              */
+            if (currentBalance < 0.50m)
+            {
+                return RedirectToAction("LuckList");
+
+            }
+
+
+            currentBalance -= 0.50m;
+
+            if (spin.IsWinning) {
+                currentBalance += 1.00m;
+            }
+
+
 
 
             //TODO: Step 1
 
-
+            repository.AddSpinBalance(spin, currentBalance);
             //TODO: Step 2
 
-
+            spin.Player.Balance = currentBalance;
             //TODO: Step 3
 
 
@@ -97,8 +112,8 @@ namespace LuckySpin.Controllers
             return View(new LuckList
             {
                 SpinBalances = repository.SpinBalances,
-                Player = repository.Player
-            });
+                FirstName = repository.Player.FirstName
+            }) ;
         }
 
     }
