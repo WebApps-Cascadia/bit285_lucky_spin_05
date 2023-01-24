@@ -21,8 +21,9 @@ namespace LuckySpin.Services
         {
             spinBalances.Add(new SpinBalance
             {
-                Spin = spin,
-                Balance = balance
+                Numbers = spin.Numbers,
+                Balance = balance,
+                IsWinning = spin.IsWinning
             });
         }
         //Game Reset - Use this to refresh the list of spin-balance
