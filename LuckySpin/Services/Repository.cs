@@ -21,7 +21,8 @@ namespace LuckySpin.Services
         {
             spinBalances.Add(new SpinBalance
             {
-                Spin = spin,
+                Numbers = spin.Numbers,
+                IsWinning = spin.IsWinning,
                 Balance = balance
             });
         }

@@ -97,7 +97,7 @@ namespace LuckySpin.Controllers
             return View(new LuckList
             {
                 SpinBalances = repository.SpinBalances,
-                Player = repository.Player
+                FirstName = repository.Player.FirstName
             });
         }
 
