@@ -2,7 +2,7 @@
 {
     public class SpinBalance
     {
-        public int[] Numbers { get; set; }
+        public int[] Spin { get; set; }
 
         public Boolean IsWinning { get; set; }
 
