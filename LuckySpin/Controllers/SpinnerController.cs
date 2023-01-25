@@ -7,6 +7,7 @@ using LuckySpin.Services;
 using System.Globalization;
 using static System.Formats.Asn1.AsnWriter;
 using LuckySpin.ViewModels;
+using System.Numerics;
 
 namespace LuckySpin.Controllers
 {
@@ -24,6 +25,8 @@ namespace LuckySpin.Controllers
         public SpinnerController(Repository repository)
         {
             // 3) TODO: save the DIJ Repository object into your instance variable
+            this.repository = repository;
+
 
         }
 
@@ -43,6 +46,8 @@ namespace LuckySpin.Controllers
 
             //TODO: Store the player in the repository
 
+            repository.Player = player;
+            //can add reset game here
 
             return RedirectToAction("Spin");
         }
@@ -53,10 +58,10 @@ namespace LuckySpin.Controllers
         public IActionResult Spin() //DON'T pass player info, get from repository
         {
             //TODO - Change the line below: create a new Spin with the player from the repository
-            Spin spin = new Spin {  };
+            Spin spin = new Spin { Player = repository.Player };
 
             //TODO - Change the line below: get the Player's current balance from the repository
-            currentBalance = 1.0m;
+            currentBalance = repository.Player.Balance;
 
             /**
              * GAME PLAY LOGIC TODOs
@@ -76,14 +81,33 @@ namespace LuckySpin.Controllers
 
 
             //TODO: Step 1
-
+            if (currentBalance <= 0.5m) {
+                return RedirectToAction("LuckList");
+            } 
+            else {
+                currentBalance -= 0.50m;
+            }
 
             //TODO: Step 2
 
+            if (spin.IsWinning == true)
+            {
+                currentBalance += 1.0m;
+            }
+
+            /*for (int i = 0; i <= spin.Numbers.Length; i++)
+            {
+                if (spin.Numbers[i] == repository.Player.Luck)
+                {
+                    spin.IsWinning = true;
+
+                }
+            }*/
 
             //TODO: Step 3
 
-
+            repository.AddSpinBalance(spin, currentBalance);
+            repository.Player.Balance = currentBalance;
             return View("Spin", spin);
         }
 
@@ -96,7 +120,7 @@ namespace LuckySpin.Controllers
             //TODO: Pass the repository's SpinBalances list and Player as a new LuckList to the View
             return View(new LuckList
             {
-                SpinBalances = repository.SpinBalances,
+                Balances = repository.SpinBalances,
                 Player = repository.Player
             });
         }
