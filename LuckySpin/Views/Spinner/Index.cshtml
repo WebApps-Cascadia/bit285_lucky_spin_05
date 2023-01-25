@@ -29,7 +29,8 @@
         </label>
         <!-- TODO: add a new input for the Balance similar to FirstName input-->
         <label>
-
+            <input asp-for="Balance" placeholder="1-10" />
+            <span asp-validation-for="Balance"></span>
         </label>
     </fieldset>
     <input type="submit" value="Start Betting" />
