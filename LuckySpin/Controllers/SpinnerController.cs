@@ -24,6 +24,7 @@ namespace LuckySpin.Controllers
         public SpinnerController(Repository repository)
         {
             // 3) TODO: save the DIJ Repository object into your instance variable
+            this.repository = repository;
 
         }
 
@@ -42,7 +43,7 @@ namespace LuckySpin.Controllers
             if(!ModelState.IsValid) { return View(); }
 
             //TODO: Store the player in the repository
-
+            repository.Player = player;
 
             return RedirectToAction("Spin");
         }
@@ -53,11 +54,11 @@ namespace LuckySpin.Controllers
         public IActionResult Spin() //DON'T pass player info, get from repository
         {
             //TODO - Change the line below: create a new Spin with the player from the repository
-            Spin spin = new Spin {  };
+            Spin spin = new Spin { Player = repository.Player };
 
             //TODO - Change the line below: get the Player's current balance from the repository
-            currentBalance = 1.0m;
-
+            currentBalance = repository.Player.Balance;
+            IsWinning = repository.Spin.Winning;
             /**
              * GAME PLAY LOGIC TODOs
              *   1) See if the Player has enough $ to play
@@ -76,11 +77,18 @@ namespace LuckySpin.Controllers
 
 
             //TODO: Step 1
+            if (currentBalance < 0.5m)
+            {
+                return RedirectToAction("LuckList");
+            }
 
-
+            
+            else
+            {
+                currentBalance -= .5m;
+            }
             //TODO: Step 2
-
-
+            if (SpinBalance.)
             //TODO: Step 3
 
 
